@@ -46,9 +46,6 @@ running = True
 # to remain equality on every System
 deltatime = 0
 
-# Event Definitions
-
-
 
 # Overwrite last Frame so it isnt showing the last frame with the current frame mixed
 def overwrite_Last_Frame():
