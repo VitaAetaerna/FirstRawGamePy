@@ -1,5 +1,6 @@
 # Full Source -> https://github.com/VitaAetaerna/FirstRawGamePy
-# TODO: KEEP FULLY DOCUMENTED ._.
+# Extension used for Comment Highlighting: Better Comments by Aaron Bond (vscode)
+# Full Blame @VitaAeterna
 
 # Todo: Collisions for Player and Enemy
 # Todo: Player CANNOT exit map, always comes back from opposite direction   | <- player going out left   |  <- coming back from right
@@ -97,9 +98,9 @@ class Player(object):
 
 
     # Teleport Player to other side od map when crossing a border ;)
+    # Instantiating a new class is needed to access this method
     def map_border(self, screen):
         top, bottom, left, right = 0, 600, 0, 600
-
         if self.x <= left:
             self.x = 599
         if self.x >= right:
