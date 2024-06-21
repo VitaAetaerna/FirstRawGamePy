@@ -1,9 +1,6 @@
 # Full Source -> https://github.com/VitaAetaerna/FirstRawGamePy
 # TODO: KEEP FULLY DOCUMENTED ._.
 
-
-
-
 # Todo: Collisions for Player and Enemy
 # Todo: Player CANNOT exit map, always comes back from opposite direction   | <- player going out left   |  <- coming back from right
 # Todo: Powerups
@@ -21,22 +18,22 @@
                 # Design and Art
 # Todo: Maybe make own art for this
 
-#       X Let Enemy Randomly Spawn  X
+# !     X Let Enemy Randomly Spawn  X
 #       XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #       X             |             X
 #       X             v             X
 #       X                           X
-#       X                           X   Make Powerups appear when Enemies die and randomly drop /  Chances = Low for random but better powerup
-#       X  - >      Player   <-     X   Let Enemy Randomly Spawn and on left side
+# !     X                           X   Make Powerups appear when Enemies die and randomly drop /  Chances = Low for random but better powerup
+# !     X  - >      Player   <-     X   Let Enemy Randomly Spawn and on left side
 #       X                           X 
 #       X                           X
 #       X             ^             X
 #       X            |              X
 #       X                           X
 #       XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-#       X Let Enemy Randomly Spawn  X
+# !     X Let Enemy Randomly Spawn  X
 
-# get Necessary imports
+# ! get Necessary imports
 import pygame
 # Initialize Pygame engine
 pygame.init()
@@ -46,43 +43,64 @@ screen = pygame.display.set_mode((600, 600))
 clock = pygame.time.Clock()
 # running = if main game loop is running or not // if true == game runs else it closes
 running = True
-# In the Middle of the Screen (always) maxHeight / 2 and maxWidth / 2
-player_Position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 # Delta Time so all of the variables are equal on each PC, doesnt matter how fast, always the same 
 # If a PC is faster deltaTime would be higher so values are multiplied by a fix deltaTime
-# to remain equallitxy on evey System
+# to remain equality on every System
 deltatime = 0
 
+# Event Definitions
+
+
+
+# Overwrite last Frame so it isnt showing the last frame with the current frame mixed
 def overwrite_Last_Frame():
     screen.fill("black")
 
-def draw_Player():
-    # Draw Player onto screen / happens every frame
-    # args(where to draw, color, position, radius of circle)
-    pygame.draw.circle(screen, "blue", player_Position, radius=7)
+class Player(object):
 
-def PlayerMovementCheck():
-    # Get Inputs
-    keys = pygame.key.get_pressed()
-    # Walk Forward with Button W
-    if keys[pygame.K_w]:
-        # Update Player Position
-        player_Position.y -= 300 * deltatime
+    # Constructor
+    def __init__(self, x, y, radius, color):
+        self.x = x
+        self.y = y
+        self.radius = radius
+        self.color = color
+        self.player_position = (self.x, self.y)
 
-    # Walk Backwards with Button S
-    if keys[pygame.K_s]:
-        # Update Player Position
-        player_Position.y += 300 * deltatime
+    # Drawing the Player on the Screen
+    # Instantiating a new class is needed to access this method
+    def draw_Player(self, screen):
+        pygame.draw.circle(screen, center=[int(self.x), int(self.y)], radius=self.radius, color=self.color) 
+    
 
-    # Walk To the left with Button A
-    if keys[pygame.K_a]:
-        # Update Player Position
-        player_Position.x -= 300 * deltatime
+    # Keybind checking // Moving Player // Redrawing Position // 
+    # Instantiating a new class is needed to access this method
+    def player_input(self):
+        # Get Inputs
+        keys = pygame.key.get_pressed()
+        # Walk Forward with Button W
+        if keys[pygame.K_w]:
+            # Update Player Position
+            self.y -= 300 * deltatime
 
-    # Walk Forward with Button D
-    if keys[pygame.K_d]:
-        # Update Player Position
-        player_Position.x += 300 * deltatime
+        # Walk Backwards with Button S
+        if keys[pygame.K_s]:
+            # Update Player Position
+            self.y += 300 * deltatime
+
+        # Walk To the left with Button A
+        if keys[pygame.K_a]:
+            # Update Player Position
+            self.x -= 300 * deltatime
+
+        # Walk Forward with Button D
+        if keys[pygame.K_d]:
+            # Update Player Position
+            self.x += 300 * deltatime
+
+
+# Instantiating new Instance of Classes
+player = Player(x=200, y=200, radius=10, color="blue")
+# Add Spawned Bullets and then pop them to make them despawn
 
 # Main Game Loop
 while running:
@@ -91,18 +109,13 @@ while running:
         # When Player clicks X on windows the game loop will break 
         if event.type == pygame.QUIT:
             running = False
+
     # First thing todo in each frame ->> Clear old frame -> make new Frame so just fill with black
     # Before anything else gets drawn because otherwise it will not be shown 
     overwrite_Last_Frame()
-    draw_Player()
     # Check for Player Movement
-    PlayerMovementCheck()
-
-
-
-
-
-
+    player.draw_Player(screen)
+    player.player_input()
 
     # Show what is happening on screen with flip 
     pygame.display.flip()
