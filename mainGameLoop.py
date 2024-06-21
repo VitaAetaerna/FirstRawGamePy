@@ -15,9 +15,6 @@
 # TODO: Optimization, dont  it get too big <- it depends on the technique anyways ;)
 
 
-                # Design and Art
-# Todo: Maybe make own art for this
-
 # !     X Let Enemy Randomly Spawn  X
 #       XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #       X             |             X
@@ -69,6 +66,7 @@ class Player(object):
     # Drawing the Player on the Screen
     # Instantiating a new class is needed to access this method
     def draw_Player(self, screen):
+        print(self.x, self.y)
         pygame.draw.circle(screen, center=[int(self.x), int(self.y)], radius=self.radius, color=self.color) 
     
 
@@ -98,6 +96,22 @@ class Player(object):
             self.x += 300 * deltatime
 
 
+    # Teleport Player to other side od map when crossing a border ;)
+    def map_border(self, screen):
+        top, bottom, left, right = 0, 600, 0, 600
+
+        if self.x <= left:
+            self.x = 599
+        if self.x >= right:
+            self.x = 25
+
+        if self.y <= top:
+            self.y = 599
+
+        if self.y >= bottom:
+            self.y = 25
+
+
 # Instantiating new Instance of Classes
 player = Player(x=200, y=200, radius=10, color="blue")
 # Add Spawned Bullets and then pop them to make them despawn
@@ -116,6 +130,7 @@ while running:
     # Check for Player Movement
     player.draw_Player(screen)
     player.player_input()
+    player.map_border(screen)
 
     # Show what is happening on screen with flip 
     pygame.display.flip()
